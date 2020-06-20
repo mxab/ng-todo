@@ -31,4 +31,8 @@ export class AppComponent {
   );
 
   constructor(private todoService: TodoService) {}
+
+  complete(index: number) {
+    this.todoService.complete(index);
+  }
 }

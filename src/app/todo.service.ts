@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Todo } from './todo';
 import { delay } from 'rxjs/operators';
 
@@ -22,5 +22,10 @@ export class TodoService {
 
   public findAll(): Observable<Todo[]> {
     return of(this.db).pipe(delay(2000));
+  }
+
+  complete(i: number): Observable<Todo> {
+    this.db[i].done = true;
+    return of(this.db[i]);
   }
 }
