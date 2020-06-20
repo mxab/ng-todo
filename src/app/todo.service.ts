@@ -21,7 +21,6 @@ export class TodoService {
   constructor() {}
 
   public findAll(): Observable<Todo[]> {
-    return throwError(new Error('Something went wrong'));
-    // return of(this.db).pipe(delay(2000));
+    return of(this.db).pipe(delay(2000));
   }
 }
