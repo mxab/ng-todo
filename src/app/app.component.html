@@ -5,12 +5,19 @@
 
     <div class="col-md-5">
       <h1>Todos</h1>
-      <ul class="list-group" *ngIf="todoState$ | async as todoState">
+      <ul class="list-group" *ngIf="todoState$ | async as todoState; else initalizing">
         <li *ngFor="let todo of todoState"
             class="list-group-item todo" [ngClass]="{done: todo.done}">
           <span class="name" >{{todo.name}}</span>
           </li>
       </ul>
+      <ng-template #initalizing>
+        <div class="d-flex justify-content-center">
+          <div class="spinner-border m-5" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+      </ng-template>
     </div>
   </div>
 
