@@ -1,6 +1,5 @@
 <div class="container">
 
-
   <div class="row justify-content-md-center">
 
     <div class="col-md-5">
@@ -9,7 +8,7 @@
         <li *ngFor="let todo of todoState"
             class="list-group-item todo" [ngClass]="{done: todo.done}">
           <span class="name" >{{todo.name}}</span>
-          </li>
+        </li>
       </ul>
       <ng-template #initalizing>
         <div class="d-flex justify-content-center">
