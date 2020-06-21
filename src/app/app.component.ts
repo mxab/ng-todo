@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TodoService } from './todo.service';
-import { catchError, map, scan, switchAll, tap } from 'rxjs/operators';
+import { catchError, map, scan, startWith, switchAll } from 'rxjs/operators';
 import { BehaviorSubject, EMPTY, Observable, of } from 'rxjs';
 import { Todo } from './todo';
 
@@ -18,19 +18,27 @@ export class AppComponent {
     map((todos) => {
       return {
         todos,
+        loading: false,
         error: null,
       };
     }),
     catchError((e) => {
       return of({
         todos: [],
+        loading: false,
         error: e.toString(),
       });
+    }),
+    startWith({
+      todos: [],
+      loading: true,
+      error: null,
     })
   );
   todoState$: Observable<{
     todos: Todo[];
     error?: string;
+    loading: boolean;
   }> = this.load$.pipe(
     scan((agg, unused) => {
       return this.todos$;
