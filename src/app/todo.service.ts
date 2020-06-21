@@ -27,6 +27,7 @@ export class TodoService {
 
   public findAll(filter: { status: StatusFilter }): Observable<Todo[]> {
     return new Observable((subscriber) => {
+      console.log('Loading....', filter);
       setTimeout(() => {
         const values = this.cloneDB().filter((todo) => {
           if (filter.status === StatusFilter.all) {

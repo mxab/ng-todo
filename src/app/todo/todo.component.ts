@@ -1,7 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { StatusFilter, TodoService } from '../todo.service';
 import { BehaviorSubject, combineLatest, EMPTY, Observable, of } from 'rxjs';
-import { catchError, map, scan, startWith, switchAll } from 'rxjs/operators';
+import {
+  catchError,
+  map,
+  scan,
+  startWith,
+  switchAll,
+  tap,
+} from 'rxjs/operators';
 import { Todo } from '../todo';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,7 +29,7 @@ export class TodoComponent implements OnInit {
   ngOnInit(): void {}
 
   filter = this.fb.group({
-    status: this.fb.control(StatusFilter.all),
+    status: this.fb.control(this.route.snapshot.paramMap.get('status')),
   });
 
   load$ = new BehaviorSubject<void>(undefined);
@@ -37,11 +44,15 @@ export class TodoComponent implements OnInit {
     loading: boolean;
   }> = combineLatest([this.route.paramMap, this.load$]).pipe(
     scan((agg, [params, ...others]) => {
+      let statusFilter = (params.get('status') || '') as StatusFilter;
       return this.todoService
         .findAll({
-          status: (params.get('status') || '') as StatusFilter,
+          status: statusFilter,
         })
         .pipe(
+          tap((v) => {
+            this.filter.reset({ status: statusFilter });
+          }),
           map((todos) => {
             return {
               todos,
