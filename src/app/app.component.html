@@ -5,11 +5,26 @@
       <div *ngIf="todoState$ | async as todoState; else initalizing">
         <ul class="list-group">
           <li
-            *ngFor="let todo of todoState.todos"
+            *ngFor="let todo of todoState.todos; let i = index"
             class="list-group-item todo"
             [ngClass]="{ done: todo.done }"
           >
-            <span class="name">{{ todo.name }}</span>
+            <div class="row justify-content-between">
+              <div class="col-4">
+                <span class="name">{{ todo.name }}</span>
+              </div>
+              <div class="col-4">
+                <button
+                  *ngIf="!todo.done"
+                  type="button"
+                  class="btn btn-outline-secondary btn-sm float-right"
+                  (click)="complete(i)"
+                >
+                  <span class="sr-only">Done</span>
+                  ✔️
+                </button>
+              </div>
+            </div>
           </li>
         </ul>
         <div class="alert alert-danger" role="alert" *ngIf="todoState.error">

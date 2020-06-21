@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Todo } from './todo';
-import { delay } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -35,6 +34,6 @@ export class TodoService {
 
   complete(i: number): Observable<Todo> {
     this.db[i].done = true;
-    return of(this.db[i]);
+    return of(this.cloneDB()[i]);
   }
 }
