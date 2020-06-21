@@ -21,7 +21,16 @@ export class TodoService {
   constructor() {}
 
   public findAll(): Observable<Todo[]> {
-    return of(this.db).pipe(delay(2000));
+    return new Observable((subscriber) => {
+      setTimeout(() => {
+        subscriber.next(this.cloneDB());
+        subscriber.complete();
+      }, 2000);
+    });
+  }
+
+  private cloneDB() {
+    return JSON.parse(JSON.stringify(this.db));
   }
 
   complete(i: number): Observable<Todo> {
