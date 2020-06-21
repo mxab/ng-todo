@@ -2,6 +2,12 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Todo } from './todo';
 
+export enum StatusFilter {
+  open = 'open',
+  done = 'done',
+  all = '',
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -19,16 +25,27 @@ export class TodoService {
 
   constructor() {}
 
-  public findAll(): Observable<Todo[]> {
+  public findAll(filter: { status: StatusFilter }): Observable<Todo[]> {
     return new Observable((subscriber) => {
       setTimeout(() => {
-        subscriber.next(this.cloneDB());
+        const values = this.cloneDB().filter((todo) => {
+          if (filter.status === StatusFilter.all) {
+            return true;
+          } else if (filter.status === StatusFilter.done && todo.done) {
+            return true;
+          } else if (filter.status === StatusFilter.open && !todo.done) {
+            return true;
+          }
+          return false;
+        });
+
+        subscriber.next(values);
         subscriber.complete();
-      }, 2000);
+      }, 800);
     });
   }
 
-  private cloneDB() {
+  private cloneDB(): Todo[] {
     return JSON.parse(JSON.stringify(this.db));
   }
 
